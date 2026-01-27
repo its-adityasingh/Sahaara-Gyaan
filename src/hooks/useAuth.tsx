@@ -91,13 +91,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // First check for hardcoded session
-    const hardcodedSession = loadHardcodedSession();
-    if (hardcodedSession) {
-      setUser(hardcodedSession.user);
-      setSession(hardcodedSession.session);
-      setLoading(false);
-      return;
+    try {
+      // First check for hardcoded session
+      const hardcodedSession = loadHardcodedSession();
+      if (hardcodedSession && hardcodedSession.user && hardcodedSession.session) {
+        setUser(hardcodedSession.user);
+        setSession(hardcodedSession.session);
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.error('Error loading hardcoded session:', error);
+      // Continue to Supabase check if hardcoded session fails
     }
 
     // Only set up auth if Supabase is configured
@@ -106,26 +111,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+    try {
+      // Set up auth state listener FIRST
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        }
+      );
+
+      // THEN check for existing session
+      supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-      }
-    );
+      }).catch((error) => {
+        console.error('Error getting Supabase session:', error);
+        // If session check fails, just set loading to false
+        setLoading(false);
+      });
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+      return () => {
+        try {
+          subscription.unsubscribe();
+        } catch (error) {
+          console.error('Error unsubscribing from auth state:', error);
+        }
+      };
+    } catch (error) {
+      console.error('Error setting up Supabase auth:', error);
       setLoading(false);
-    }).catch(() => {
-      // If session check fails, just set loading to false
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }
   }, []);
 
   const signUp = async (

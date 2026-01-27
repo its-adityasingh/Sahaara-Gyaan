@@ -5,6 +5,9 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Base path for production builds (empty string means root)
+  base: '/',
+  
   server: {
     host: "::",
     port: 8080,
@@ -19,6 +22,9 @@ export default defineConfig(({ mode }) => ({
     // Increase chunk size warning limit (default is 500KB)
     // This is useful for large dependencies like recharts, supabase, etc.
     chunkSizeWarningLimit: 1000,
+    
+    // Ensure proper output directory
+    outDir: 'dist',
     
     // Optimize chunk splitting for better caching and loading performance
     rollupOptions: {
@@ -49,5 +55,14 @@ export default defineConfig(({ mode }) => ({
     
     // Increase build target for better optimization
     target: 'esnext',
+    
+    // Ensure assets are properly referenced
+    assetsDir: 'assets',
+  },
+  
+  // Ensure proper handling of environment variables
+  define: {
+    'import.meta.env.DEV': JSON.stringify(mode === 'development'),
+    'import.meta.env.PROD': JSON.stringify(mode === 'production'),
   },
 }));

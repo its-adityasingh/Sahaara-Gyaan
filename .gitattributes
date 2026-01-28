@@ -1,0 +1,79 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.sql text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.less text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
+*.lockb binary
+
+# Language detection for GitHub Linguist
+# Ensure all languages are detected and counted in repository statistics
+
+# TypeScript files
+*.ts linguist-detectable=true linguist-language=TypeScript
+*.tsx linguist-detectable=true linguist-language=TypeScript
+
+# JavaScript files
+*.js linguist-detectable=true linguist-language=JavaScript
+*.jsx linguist-detectable=true linguist-language=JavaScript
+
+# SQL files (migrations)
+*.sql linguist-detectable=true linguist-language=SQL
+supabase/migrations/*.sql linguist-detectable=true linguist-language=SQL linguist-vendored=false
+
+# Configuration files
+*.toml linguist-detectable=true linguist-language=TOML
+*.yaml linguist-detectable=true linguist-language=YAML
+*.yml linguist-detectable=true linguist-language=YAML
+*.json linguist-detectable=true linguist-language=JSON
+
+# Ensure config files are counted (not ignored)
+package.json linguist-detectable=true linguist-language=JSON linguist-vendored=false
+tsconfig*.json linguist-detectable=true linguist-language=JSON linguist-vendored=false
+components.json linguist-detectable=true linguist-language=JSON linguist-vendored=false
+*.config.js linguist-detectable=true linguist-language=JavaScript linguist-vendored=false
+*.config.ts linguist-detectable=true linguist-language=TypeScript linguist-vendored=false
+eslint.config.js linguist-detectable=true linguist-language=JavaScript linguist-vendored=false
+postcss.config.js linguist-detectable=true linguist-language=JavaScript linguist-vendored=false
+vite.config.ts linguist-detectable=true linguist-language=TypeScript linguist-vendored=false
+tailwind.config.ts linguist-detectable=true linguist-language=TypeScript linguist-vendored=false
+supabase/config.toml linguist-detectable=true linguist-language=TOML linguist-vendored=false
+
+# Markup and Styles
+*.html linguist-detectable=true linguist-language=HTML
+*.css linguist-detectable=true linguist-language=CSS
+*.scss linguist-detectable=true linguist-language=SCSS
+*.sass linguist-detectable=true linguist-language=Sass
+
+# Documentation
+*.md linguist-detectable=true linguist-language=Markdown
+README.md linguist-detectable=true linguist-language=Markdown linguist-vendored=false
+
